@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ["Dancing Script", "cursive"],
+        body: ["Poppins", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -56,6 +60,14 @@ export default {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
+        },
+        festival: {
+          gold: "hsl(var(--festival-gold))",
+          "gold-foreground": "hsl(var(--festival-gold-foreground))",
+          teal: "hsl(var(--festival-teal))",
+          magenta: "hsl(var(--festival-magenta))",
+          indigo: "hsl(var(--festival-indigo))",
+          warm: "hsl(var(--festival-warm))",
         },
       },
       borderRadius: {
