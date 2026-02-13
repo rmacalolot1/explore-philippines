@@ -73,7 +73,7 @@ const FestivalDetail = ({ festival, onClose }: FestivalDetailProps) => {
 
             <div className="mt-6">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">About</h2>
-              <p className="mt-2 text-base leading-relaxed text-foreground/80">{festival.description}</p>
+              <p className="mt-2 text-base leading-relaxed text-foreground/80 text-justify">{festival.description}</p>
             </div>
 
             {festival.highlights && festival.highlights.length > 0 && (
