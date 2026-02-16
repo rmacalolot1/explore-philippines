@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { MapPin, Sparkles, Eye, EyeOff } from "lucide-react";
+import { Crown, Sparkles, Eye, EyeOff } from "lucide-react";
 import splashBg from "@/assets/splash-bg.jpg";
 
 const AuthPage = () => {
@@ -48,32 +48,36 @@ const AuthPage = () => {
     <div className="relative flex min-h-screen flex-col items-center justify-end bg-background overflow-hidden">
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center scale-110"
         style={{ backgroundImage: `url(${splashBg})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-foreground/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-foreground/15" />
+      {/* Color accent overlays */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-accent/8" />
 
-      {/* Floating decorative elements */}
-      {[...Array(8)].map((_, i) => (
+      {/* Floating confetti */}
+      {[...Array(10)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute rounded-full"
           style={{
-            width: Math.random() * 8 + 4,
-            height: Math.random() * 8 + 4,
+            width: Math.random() * 7 + 3,
+            height: Math.random() * 7 + 3,
             background: [
-              "hsl(15 85% 55%)",
-              "hsl(42 92% 56%)",
-              "hsl(340 75% 55%)",
-              "hsl(170 65% 36%)",
-            ][i % 4],
-            top: `${10 + Math.random() * 30}%`,
+              "hsl(18 90% 52%)",
+              "hsl(42 95% 54%)",
+              "hsl(338 80% 52%)",
+              "hsl(168 70% 34%)",
+              "hsl(252 65% 50%)",
+            ][i % 5],
+            top: `${5 + Math.random() * 35}%`,
             left: `${10 + Math.random() * 80}%`,
           }}
           animate={{
-            y: [0, -20, 0],
-            opacity: [0.3, 0.8, 0.3],
-            scale: [0.8, 1.3, 0.8],
+            y: [0, -25, 0],
+            opacity: [0.2, 0.7, 0.2],
+            scale: [0.7, 1.3, 0.7],
+            rotate: [0, 180, 360],
           }}
           transition={{
             duration: 3 + Math.random() * 2,
@@ -94,15 +98,15 @@ const AuthPage = () => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", delay: 0.2, stiffness: 200 }}
-          className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl gradient-festive shadow-festive"
+          className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl gradient-festive shadow-festive shimmer overflow-hidden"
         >
-          <MapPin className="h-10 w-10 text-primary-foreground" />
+          <Crown className="h-9 w-9 text-primary-foreground relative z-10" />
         </motion.div>
         <h1 className="font-display text-6xl font-bold text-primary drop-shadow-md">SeekLakaw</h1>
-        <p className="mt-2 flex items-center justify-center gap-1 text-sm text-muted-foreground font-body">
-          <Sparkles className="h-4 w-4 text-accent" />
-          Discover Philippine Festivals
-          <Sparkles className="h-4 w-4 text-accent" />
+        <p className="mt-2.5 flex items-center justify-center gap-1.5 text-sm text-muted-foreground font-body">
+          <Sparkles className="h-3.5 w-3.5 text-festival-gold" />
+          <span className="tracking-wide">Discover Philippine Festivals</span>
+          <Sparkles className="h-3.5 w-3.5 text-festival-gold" />
         </p>
       </motion.div>
 
@@ -113,8 +117,8 @@ const AuthPage = () => {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="relative z-10 w-full max-w-sm px-6 pb-10"
       >
-        <div className="rounded-3xl bg-card/95 backdrop-blur-xl p-6 shadow-xl border border-border/50">
-          <h2 className="text-xl font-bold font-body text-card-foreground mb-1">
+        <div className="rounded-3xl glass-strong p-6 shadow-elevated">
+          <h2 className="text-xl font-extrabold font-body text-card-foreground mb-1">
             {isLogin ? "Welcome Back" : "Join the Adventure"}
           </h2>
           <p className="text-sm text-muted-foreground mb-5">
@@ -124,19 +128,19 @@ const AuthPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-card-foreground text-sm">Display Name</Label>
+                <Label htmlFor="name" className="text-card-foreground text-sm font-semibold">Display Name</Label>
                 <Input
                   id="name"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="Juan dela Cruz"
                   required={!isLogin}
-                  className="h-12 rounded-xl bg-muted/50 border-border/50"
+                  className="h-12 rounded-xl bg-muted/40 border-border/40 focus:border-primary/50"
                 />
               </div>
             )}
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-card-foreground text-sm">Email</Label>
+              <Label htmlFor="email" className="text-card-foreground text-sm font-semibold">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -144,11 +148,11 @@ const AuthPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="h-12 rounded-xl bg-muted/50 border-border/50"
+                className="h-12 rounded-xl bg-muted/40 border-border/40 focus:border-primary/50"
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-card-foreground text-sm">Password</Label>
+              <Label htmlFor="password" className="text-card-foreground text-sm font-semibold">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -158,12 +162,12 @@ const AuthPage = () => {
                   placeholder="••••••••"
                   required
                   minLength={6}
-                  className="h-12 rounded-xl bg-muted/50 border-border/50 pr-12"
+                  className="h-12 rounded-xl bg-muted/40 border-border/40 pr-12 focus:border-primary/50"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -173,7 +177,7 @@ const AuthPage = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full gradient-festive text-primary-foreground font-semibold h-12 text-base shadow-festive hover:opacity-90 transition-all rounded-xl"
+              className="w-full gradient-festive text-primary-foreground font-bold h-12 text-base shadow-festive hover:opacity-90 transition-all rounded-xl shimmer overflow-hidden"
             >
               {loading ? (
                 <motion.div

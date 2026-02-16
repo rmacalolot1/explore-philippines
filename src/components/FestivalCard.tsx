@@ -23,10 +23,10 @@ interface FestivalCardProps {
 }
 
 const categoryColors: Record<string, string> = {
-  religious: "bg-festival-indigo text-primary-foreground",
-  cultural: "bg-festival-magenta text-primary-foreground",
-  harvest: "bg-festival-teal text-primary-foreground",
-  festival: "bg-festival-gold text-foreground",
+  religious: "bg-festival-indigo/15 text-festival-indigo border border-festival-indigo/20",
+  cultural: "bg-festival-magenta/15 text-festival-magenta border border-festival-magenta/20",
+  harvest: "bg-festival-teal/15 text-festival-teal border border-festival-teal/20",
+  festival: "bg-festival-gold/15 text-festival-gold border border-festival-gold/20",
 };
 
 const FestivalCard = ({ festival, index, onClick }: FestivalCardProps) => {
@@ -50,31 +50,31 @@ const FestivalCard = ({ festival, index, onClick }: FestivalCardProps) => {
       transition={{ delay: Math.min(index * 0.04, 0.3), duration: 0.35 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="group cursor-pointer overflow-hidden rounded-2xl bg-card shadow-card hover:shadow-festive transition-all duration-300"
+      className="group cursor-pointer overflow-hidden rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-400 border border-border/50"
     >
       <div className="flex">
-        {/* Left: Image with overlay */}
-        <div className="relative h-[130px] w-[120px] flex-shrink-0 overflow-hidden">
+        {/* Left: Image */}
+        <div className="relative h-[135px] w-[115px] flex-shrink-0 overflow-hidden">
           <img
             src={festival.image_url || "/placeholder.svg"}
             alt={festival.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115"
             onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-card/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/10" />
           {/* Date badge */}
-          <div className="absolute top-2 left-2 flex flex-col items-center rounded-xl bg-background/90 backdrop-blur-sm px-2 py-1 shadow-sm">
-            <span className="text-[9px] font-bold text-primary uppercase leading-none tracking-wider">{month}</span>
-            <span className="text-lg font-extrabold text-foreground leading-tight">{day}</span>
+          <div className="absolute top-2 left-2 flex flex-col items-center rounded-xl gradient-festive px-2.5 py-1.5 shadow-festive">
+            <span className="text-[8px] font-extrabold text-primary-foreground/80 uppercase leading-none tracking-widest">{month}</span>
+            <span className="text-lg font-black text-primary-foreground leading-tight">{day}</span>
           </div>
         </div>
 
         {/* Right: Content */}
-        <div className="flex flex-1 flex-col justify-between p-3 min-w-0">
+        <div className="flex flex-1 flex-col justify-between p-3.5 min-w-0">
           <div>
             {festival.category && (
               <span
-                className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-bold capitalize mb-1 tracking-wide ${categoryColors[festival.category] || "bg-primary text-primary-foreground"}`}
+                className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-bold capitalize mb-1.5 tracking-wide ${categoryColors[festival.category] || "bg-primary/15 text-primary border border-primary/20"}`}
               >
                 {festival.category}
               </span>
@@ -84,17 +84,19 @@ const FestivalCard = ({ festival, index, onClick }: FestivalCardProps) => {
             </h3>
           </div>
 
-          <div className="mt-auto flex flex-col gap-0.5">
+          <div className="mt-auto flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
               <MapPin className="h-3 w-3 text-primary flex-shrink-0" />
-              <span className="truncate">{festival.location}, {festival.province}</span>
+              <span className="truncate font-medium">{festival.location}, {festival.province}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                 <Calendar className="h-3 w-3 text-secondary flex-shrink-0" />
                 <span>{dateLabel}</span>
               </div>
-              <ArrowRight className="h-3.5 w-3.5 text-primary opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200" />
+              <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <ArrowRight className="h-3 w-3 text-primary" />
+              </div>
             </div>
           </div>
         </div>
