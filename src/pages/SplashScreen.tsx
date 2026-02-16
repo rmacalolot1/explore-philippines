@@ -28,40 +28,44 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
         >
           {/* Background image */}
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-center scale-110"
             style={{ backgroundImage: `url(${splashBg})` }}
           />
           {/* Overlay */}
-          <div className="absolute inset-0 bg-foreground/50" />
+          <div className="absolute inset-0 bg-foreground/55" />
+          {/* Gradient accents */}
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-accent/10" />
 
           {/* Content */}
           <div className="relative z-10 flex flex-col items-center gap-6">
             {/* Animated confetti dots */}
-            {[...Array(12)].map((_, i) => (
+            {[...Array(16)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute rounded-full"
                 style={{
-                  width: Math.random() * 10 + 6,
-                  height: Math.random() * 10 + 6,
+                  width: Math.random() * 8 + 5,
+                  height: Math.random() * 8 + 5,
                   background: [
-                    "hsl(15 85% 55%)",
-                    "hsl(42 92% 56%)",
-                    "hsl(340 75% 55%)",
-                    "hsl(170 65% 36%)",
-                    "hsl(250 60% 52%)",
-                  ][i % 5],
-                  top: `${Math.random() * 100 - 50}%`,
-                  left: `${Math.random() * 100 - 50}%`,
+                    "hsl(18 90% 52%)",
+                    "hsl(42 95% 54%)",
+                    "hsl(338 80% 52%)",
+                    "hsl(168 70% 34%)",
+                    "hsl(252 65% 50%)",
+                    "hsl(0 0% 100%)",
+                  ][i % 6],
+                  top: `${Math.random() * 120 - 60}%`,
+                  left: `${Math.random() * 120 - 60}%`,
                 }}
                 animate={{
-                  y: [0, -30, 0],
-                  x: [0, Math.random() * 20 - 10, 0],
-                  opacity: [0.4, 1, 0.4],
-                  scale: [0.8, 1.2, 0.8],
+                  y: [0, -40, 0],
+                  x: [0, Math.random() * 24 - 12, 0],
+                  opacity: [0.2, 0.9, 0.2],
+                  scale: [0.6, 1.4, 0.6],
+                  rotate: [0, 180, 360],
                 }}
                 transition={{
-                  duration: 2 + Math.random() * 2,
+                  duration: 2.5 + Math.random() * 2,
                   repeat: Infinity,
                   delay: Math.random() * 1.5,
                 }}
@@ -82,7 +86,7 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6 }}
-              className="text-lg font-body font-light tracking-widest text-primary-foreground/80 uppercase"
+              className="text-base font-body font-light tracking-[0.25em] text-primary-foreground/75 uppercase"
             >
               Discover Philippine Festivals
             </motion.p>
@@ -92,13 +96,13 @@ const SplashScreen = ({ onFinish }: SplashScreenProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
-              className="mt-8 h-1 w-48 overflow-hidden rounded-full bg-primary-foreground/20"
+              className="mt-10 h-1 w-52 overflow-hidden rounded-full bg-primary-foreground/15"
             >
               <motion.div
                 initial={{ x: "-100%" }}
                 animate={{ x: "0%" }}
                 transition={{ duration: 2.5, ease: "easeInOut" }}
-                className="h-full w-full gradient-warm rounded-full"
+                className="h-full w-full gradient-gold rounded-full"
               />
             </motion.div>
           </div>
