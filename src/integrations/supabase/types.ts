@@ -14,6 +14,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      favorites: {
+        Row: {
+          created_at: string
+          festival_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          festival_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          festival_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_festival_id_fkey"
+            columns: ["festival_id"]
+            isOneToOne: false
+            referencedRelation: "festivals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       festivals: {
         Row: {
           category: string | null

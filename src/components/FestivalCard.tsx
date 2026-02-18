@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MapPin, Calendar, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, ArrowRight, Heart } from "lucide-react";
 import { format } from "date-fns";
 
 interface Festival {
@@ -20,6 +20,8 @@ interface FestivalCardProps {
   festival: Festival;
   index: number;
   onClick: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
 const categoryColors: Record<string, string> = {
@@ -29,7 +31,7 @@ const categoryColors: Record<string, string> = {
   festival: "bg-festival-gold/15 text-festival-gold border border-festival-gold/20",
 };
 
-const FestivalCard = ({ festival, index, onClick }: FestivalCardProps) => {
+const FestivalCard = ({ festival, index, onClick, isFavorite = false, onToggleFavorite }: FestivalCardProps) => {
   const startDate = new Date(festival.start_date);
   const endDate = festival.end_date ? new Date(festival.end_date) : null;
 
@@ -72,16 +74,29 @@ const FestivalCard = ({ festival, index, onClick }: FestivalCardProps) => {
         {/* Right: Content */}
         <div className="flex flex-1 flex-col justify-between p-3.5 min-w-0">
           <div>
-            {festival.category && (
-              <span
-                className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-bold capitalize mb-1.5 tracking-wide ${categoryColors[festival.category] || "bg-primary/15 text-primary border border-primary/20"}`}
-              >
-                {festival.category}
-              </span>
-            )}
-            <h3 className="text-[15px] font-bold font-body text-card-foreground leading-snug line-clamp-2">
-              {festival.name}
-            </h3>
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                {festival.category && (
+                  <span
+                    className={`inline-block rounded-full px-2.5 py-0.5 text-[9px] font-bold capitalize mb-1.5 tracking-wide ${categoryColors[festival.category] || "bg-primary/15 text-primary border border-primary/20"}`}
+                  >
+                    {festival.category}
+                  </span>
+                )}
+                <h3 className="text-[15px] font-bold font-body text-card-foreground leading-snug line-clamp-2">
+                  {festival.name}
+                </h3>
+              </div>
+              {onToggleFavorite && (
+                <motion.button
+                  whileTap={{ scale: 0.8 }}
+                  onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+                  className="ml-2 flex-shrink-0 mt-1"
+                >
+                  <Heart className={`h-4.5 w-4.5 transition-all ${isFavorite ? "fill-festival-rose text-festival-rose scale-110" : "text-muted-foreground/40 hover:text-festival-rose/60"}`} />
+                </motion.button>
+              )}
+            </div>
           </div>
 
           <div className="mt-auto flex flex-col gap-1">

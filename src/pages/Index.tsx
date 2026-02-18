@@ -1,10 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, LogOut, MapPin, Sparkles, Flame, Star, CalendarDays, ChevronRight, TrendingUp, Crown } from "lucide-react";
+import { Search, LogOut, MapPin, Sparkles, Flame, Star, CalendarDays, ChevronRight, TrendingUp, Crown, Heart, PartyPopper } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import FestivalCard from "@/components/FestivalCard";
 import FestivalDetail from "@/components/FestivalDetail";
+import CalendarView from "@/pages/CalendarView";
+import ConfettiRain from "@/components/ConfettiRain";
+import FeastBanner from "@/components/FeastBanner";
+import { useFavorites } from "@/hooks/useFavorites";
 import type { Festival } from "@/components/FestivalCard";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -16,46 +20,7 @@ const categories = [
   { label: "Harvest", icon: CalendarDays, gradient: "gradient-teal" },
 ];
 
-// Confetti particles for festive feel
-const ConfettiParticles = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {[...Array(18)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute rounded-full"
-        style={{
-          width: Math.random() * 6 + 3,
-          height: Math.random() * 6 + 3,
-          background: [
-            "hsl(42 95% 54%)",
-            "hsl(18 90% 52%)",
-            "hsl(338 80% 52%)",
-            "hsl(168 70% 34%)",
-            "hsl(252 65% 50%)",
-            "hsl(0 0% 100%)",
-          ][i % 6],
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-        }}
-        animate={{
-          y: [0, -20 - Math.random() * 30, 0],
-          x: [0, Math.random() * 16 - 8, 0],
-          opacity: [0.15, 0.6, 0.15],
-          scale: [0.6, 1.2, 0.6],
-          rotate: [0, 180, 360],
-        }}
-        transition={{
-          duration: 3 + Math.random() * 4,
-          repeat: Infinity,
-          delay: Math.random() * 3,
-          ease: "easeInOut",
-        }}
-      />
-    ))}
-  </div>
-);
-
-const FeaturedCard = ({ festival, onClick }: { festival: Festival; onClick: () => void }) => {
+const FeaturedCard = ({ festival, onClick, isFav, onToggleFav }: { festival: Festival; onClick: () => void; isFav: boolean; onToggleFav: () => void }) => {
   const startDate = new Date(festival.start_date);
   return (
     <motion.div
@@ -70,19 +35,24 @@ const FeaturedCard = ({ festival, onClick }: { festival: Festival; onClick: () =
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
         onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }}
       />
-      {/* Multi-layer gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-foreground/95 via-foreground/20 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
-      {/* Top badge */}
-      <div className="absolute top-3 left-3">
+
+      {/* Top badges */}
+      <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
         <div className="glass-strong rounded-xl px-2.5 py-1 flex items-center gap-1.5">
           <CalendarDays className="h-3 w-3 text-primary" />
           <span className="text-[10px] font-bold text-foreground">{format(startDate, "MMM d")}</span>
         </div>
+        <motion.button
+          whileTap={{ scale: 0.85 }}
+          onClick={(e) => { e.stopPropagation(); onToggleFav(); }}
+          className="flex h-9 w-9 items-center justify-center rounded-xl glass-strong"
+        >
+          <Heart className={`h-4 w-4 transition-colors ${isFav ? "fill-festival-rose text-festival-rose" : "text-primary-foreground/70"}`} />
+        </motion.button>
       </div>
 
-      {/* Bottom content */}
       <div className="absolute bottom-0 left-0 right-0 p-5">
         {festival.category && (
           <span className="inline-block rounded-full gradient-gold shimmer px-3 py-0.5 text-[9px] font-extrabold text-foreground uppercase tracking-widest mb-2.5">
@@ -106,7 +76,10 @@ const Index = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedFestival, setSelectedFestival] = useState<Festival | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { isFavorite, toggleFavorite, favoriteIds } = useFavorites();
 
   useEffect(() => {
     const fetchFestivals = async () => {
@@ -136,9 +109,10 @@ const Index = () => {
       const matchCategory =
         activeCategory === "All" ||
         f.category?.toLowerCase() === activeCategory.toLowerCase();
-      return matchSearch && matchCategory;
+      const matchFav = !showFavoritesOnly || isFavorite(f.id);
+      return matchSearch && matchCategory && matchFav;
     });
-  }, [festivals, search, activeCategory]);
+  }, [festivals, search, activeCategory, showFavoritesOnly, isFavorite]);
 
   const featured = useMemo(() => {
     const now = new Date();
@@ -153,17 +127,36 @@ const Index = () => {
   };
 
   const upcomingCount = festivals.filter(f => new Date(f.start_date) >= new Date()).length;
+  const favCount = favoriteIds.size;
 
   return (
-    <div className="min-h-screen bg-background pb-8">
+    <div className="min-h-screen bg-background pb-8 relative">
+      {/* Confetti rain */}
+      <ConfettiRain count={20} />
+
       {/* Hero Header */}
       <div className="relative overflow-hidden gradient-festive px-6 pb-8 pt-14">
-        <ConfettiParticles />
-        
         {/* Decorative glow orbs */}
         <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-festival-gold/15 blur-3xl animate-pulse-glow" />
         <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-primary-foreground/8 blur-2xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
         <div className="absolute top-1/2 right-0 h-32 w-32 rounded-full bg-accent/10 blur-2xl animate-pulse-glow" style={{ animationDelay: '3s' }} />
+
+        {/* Sparkle dots */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute animate-sparkle"
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "1px",
+              background: "hsl(42 95% 54%)",
+              top: `${15 + Math.random() * 70}%`,
+              left: `${5 + Math.random() * 90}%`,
+              animationDelay: `${i * 0.3}s`,
+            }}
+          />
+        ))}
 
         <div className="relative z-10 flex items-center justify-between">
           <div>
@@ -191,13 +184,22 @@ const Index = () => {
               Your premium guide to Philippine Fiestas ✨
             </motion.p>
           </div>
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={handleLogout}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur-xl border border-primary-foreground/10 hover:bg-primary-foreground/25 transition-colors"
-          >
-            <LogOut className="h-5 w-5 text-primary-foreground" />
-          </motion.button>
+          <div className="flex gap-2">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowCalendar(true)}
+              className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur-xl border border-primary-foreground/10 hover:bg-primary-foreground/25 transition-colors"
+            >
+              <CalendarDays className="h-5 w-5 text-primary-foreground" />
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={handleLogout}
+              className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur-xl border border-primary-foreground/10 hover:bg-primary-foreground/25 transition-colors"
+            >
+              <LogOut className="h-5 w-5 text-primary-foreground" />
+            </motion.button>
+          </div>
         </div>
 
         {/* Search */}
@@ -212,12 +214,12 @@ const Index = () => {
         </div>
 
         {/* Stats pills */}
-        <div className="relative z-10 mt-5 flex gap-3">
+        <div className="relative z-10 mt-5 flex gap-2.5 overflow-x-auto scrollbar-hide">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex items-center gap-2 rounded-2xl bg-primary-foreground/12 backdrop-blur-sm px-4 py-2 border border-primary-foreground/8"
+            className="flex items-center gap-2 rounded-2xl bg-primary-foreground/12 backdrop-blur-sm px-4 py-2 border border-primary-foreground/8 flex-shrink-0"
           >
             <div className="h-6 w-6 rounded-lg gradient-gold flex items-center justify-center">
               <Sparkles className="h-3 w-3 text-foreground" />
@@ -231,7 +233,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="flex items-center gap-2 rounded-2xl bg-primary-foreground/12 backdrop-blur-sm px-4 py-2 border border-primary-foreground/8"
+            className="flex items-center gap-2 rounded-2xl bg-primary-foreground/12 backdrop-blur-sm px-4 py-2 border border-primary-foreground/8 flex-shrink-0"
           >
             <div className="h-6 w-6 rounded-lg gradient-teal flex items-center justify-center">
               <TrendingUp className="h-3 w-3 text-primary-foreground" />
@@ -241,11 +243,34 @@ const Index = () => {
               <span className="text-[11px] text-primary-foreground/60 ml-1">Upcoming</span>
             </div>
           </motion.div>
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            className={`flex items-center gap-2 rounded-2xl backdrop-blur-sm px-4 py-2 border flex-shrink-0 transition-all ${
+              showFavoritesOnly
+                ? "bg-festival-rose/25 border-festival-rose/30"
+                : "bg-primary-foreground/12 border-primary-foreground/8"
+            }`}
+          >
+            <div className="h-6 w-6 rounded-lg gradient-warm flex items-center justify-center">
+              <Heart className={`h-3 w-3 ${showFavoritesOnly ? "fill-primary-foreground text-primary-foreground" : "text-primary-foreground"}`} />
+            </div>
+            <div>
+              <span className="text-[13px] font-bold text-primary-foreground">{favCount}</span>
+              <span className="text-[11px] text-primary-foreground/60 ml-1">Saved</span>
+            </div>
+          </motion.button>
         </div>
       </div>
 
+      {/* Feast Banner */}
+      <FeastBanner />
+
       {/* Featured Carousel */}
-      {!search && activeCategory === "All" && featured.length > 0 && (
+      {!search && activeCategory === "All" && !showFavoritesOnly && featured.length > 0 && (
         <div className="mt-6">
           <div className="px-6 mb-4 flex items-center justify-between">
             <h2 className="text-base font-extrabold font-body text-foreground flex items-center gap-2">
@@ -265,6 +290,8 @@ const Index = () => {
                 key={festival.id}
                 festival={festival}
                 onClick={() => setSelectedFestival(festival)}
+                isFav={isFavorite(festival.id)}
+                onToggleFav={() => toggleFavorite(festival.id)}
               />
             ))}
           </div>
@@ -300,7 +327,7 @@ const Index = () => {
       {/* Section title */}
       <div className="px-6 mb-4 flex items-center justify-between">
         <h2 className="text-lg font-extrabold font-body text-foreground">
-          {activeCategory === "All" ? "All Festivals" : `${activeCategory} Festivals`}
+          {showFavoritesOnly ? "My Favorites ❤️" : activeCategory === "All" ? "All Festivals" : `${activeCategory} Festivals`}
         </h2>
         <span className="text-[11px] text-muted-foreground font-bold font-body glass rounded-full px-3 py-1.5">{filtered.length} found</span>
       </div>
@@ -320,10 +347,18 @@ const Index = () => {
             className="mt-16 flex flex-col items-center text-muted-foreground"
           >
             <div className="h-24 w-24 rounded-3xl glass flex items-center justify-center mb-4">
-              <MapPin className="h-12 w-12 text-muted-foreground/30" />
+              {showFavoritesOnly ? (
+                <Heart className="h-12 w-12 text-muted-foreground/30" />
+              ) : (
+                <MapPin className="h-12 w-12 text-muted-foreground/30" />
+              )}
             </div>
-            <p className="text-lg font-bold font-body">No festivals found</p>
-            <p className="text-sm mt-1 font-body text-muted-foreground/70">Try a different search or category</p>
+            <p className="text-lg font-bold font-body">
+              {showFavoritesOnly ? "No favorites yet" : "No festivals found"}
+            </p>
+            <p className="text-sm mt-1 font-body text-muted-foreground/70">
+              {showFavoritesOnly ? "Tap the heart icon to save festivals" : "Try a different search or category"}
+            </p>
           </motion.div>
         ) : (
           <div className="flex flex-col gap-3.5">
@@ -334,6 +369,8 @@ const Index = () => {
                   festival={festival}
                   index={i}
                   onClick={() => setSelectedFestival(festival)}
+                  isFavorite={isFavorite(festival.id)}
+                  onToggleFavorite={() => toggleFavorite(festival.id)}
                 />
               ))}
             </AnimatePresence>
@@ -346,8 +383,24 @@ const Index = () => {
         <FestivalDetail
           festival={selectedFestival}
           onClose={() => setSelectedFestival(null)}
+          isFavorite={isFavorite(selectedFestival.id)}
+          onToggleFavorite={() => toggleFavorite(selectedFestival.id)}
         />
       )}
+
+      {/* Calendar View */}
+      <AnimatePresence>
+        {showCalendar && (
+          <CalendarView
+            festivals={festivals}
+            onBack={() => setShowCalendar(false)}
+            onSelectFestival={(f) => {
+              setShowCalendar(false);
+              setSelectedFestival(f);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

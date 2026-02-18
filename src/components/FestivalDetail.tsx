@@ -6,9 +6,11 @@ import type { Festival } from "./FestivalCard";
 interface FestivalDetailProps {
   festival: Festival | null;
   onClose: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-const FestivalDetail = ({ festival, onClose }: FestivalDetailProps) => {
+const FestivalDetail = ({ festival, onClose, isFavorite = false, onToggleFavorite }: FestivalDetailProps) => {
   if (!festival) return null;
 
   const startDate = new Date(festival.start_date);
@@ -39,7 +41,6 @@ const FestivalDetail = ({ festival, onClose }: FestivalDetailProps) => {
             onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-foreground/5" />
-          {/* Subtle color overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
           {/* Top bar */}
@@ -54,9 +55,10 @@ const FestivalDetail = ({ festival, onClose }: FestivalDetailProps) => {
             <div className="flex gap-2">
               <motion.button
                 whileTap={{ scale: 0.9 }}
+                onClick={onToggleFavorite}
                 className="flex h-11 w-11 items-center justify-center rounded-2xl glass-strong shadow-elevated"
               >
-                <Heart className="h-4.5 w-4.5 text-foreground" />
+                <Heart className={`h-4.5 w-4.5 transition-all ${isFavorite ? "fill-festival-rose text-festival-rose" : "text-foreground"}`} />
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.9 }}

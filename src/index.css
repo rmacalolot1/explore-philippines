@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -54,6 +54,7 @@
     --gradient-gold: linear-gradient(135deg, hsl(42 95% 54%), hsl(28 100% 62%));
     --gradient-royal: linear-gradient(135deg, hsl(252 65% 50%), hsl(338 80% 52%));
     --gradient-sunset: linear-gradient(180deg, hsl(18 90% 52% / 0.9), hsl(338 80% 52% / 0.8), hsl(252 65% 50% / 0.7));
+    --gradient-feast: linear-gradient(135deg, hsl(42 95% 54%), hsl(18 90% 52%), hsl(338 80% 52%), hsl(252 65% 50%));
     --shadow-festive: 0 8px 32px -8px hsl(18 90% 52% / 0.35);
     --shadow-card: 0 2px 12px -2px hsl(220 30% 12% / 0.06);
     --shadow-glow: 0 0 40px -8px hsl(42 95% 54% / 0.3);
@@ -148,6 +149,10 @@
     background: var(--gradient-sunset);
   }
 
+  .gradient-feast {
+    background: var(--gradient-feast);
+  }
+
   .shadow-festive {
     box-shadow: var(--shadow-festive);
   }
@@ -211,6 +216,33 @@
   @keyframes shimmer {
     0% { left: -100%; }
     100% { left: 100%; }
+  }
+
+  @keyframes confetti-fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1) rotate(180deg); }
+  }
+
+  @keyframes banner-wave {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+
+  .animate-confetti {
+    animation: confetti-fall linear forwards;
+  }
+
+  .animate-sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  .animate-banner-wave {
+    animation: banner-wave 3s ease-in-out infinite;
   }
 
   .scrollbar-hide {
