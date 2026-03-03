@@ -78,6 +78,7 @@ const Index = () => {
   const [selectedFestival, setSelectedFestival] = useState<Festival | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showUpcomingOnly, setShowUpcomingOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const { isFavorite, toggleFavorite, favoriteIds } = useFavorites();
 
@@ -101,6 +102,7 @@ const Index = () => {
   }, []);
 
   const filtered = useMemo(() => {
+    const now = new Date();
     return festivals.filter((f) => {
       const matchSearch =
       f.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -110,9 +112,10 @@ const Index = () => {
       activeCategory === "All" ||
       f.category?.toLowerCase() === activeCategory.toLowerCase();
       const matchFav = !showFavoritesOnly || isFavorite(f.id);
-      return matchSearch && matchCategory && matchFav;
+      const matchUpcoming = !showUpcomingOnly || new Date(f.start_date) >= now;
+      return matchSearch && matchCategory && matchFav && matchUpcoming;
     });
-  }, [festivals, search, activeCategory, showFavoritesOnly, isFavorite]);
+  }, [festivals, search, activeCategory, showFavoritesOnly, showUpcomingOnly, isFavorite]);
 
   const featured = useMemo(() => {
     const now = new Date();
@@ -222,7 +225,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => { setShowFavoritesOnly(false); setActiveCategory("All"); setSearch(""); }}
+            onClick={() => { setShowFavoritesOnly(false); setShowUpcomingOnly(false); setActiveCategory("All"); setSearch(""); }}
             className="flex flex-col items-center gap-1 rounded-2xl bg-primary-foreground/15 backdrop-blur-sm px-3 py-3 border border-primary-foreground/10 active:bg-primary-foreground/25 transition-all">
             <div className="h-8 w-8 rounded-xl gradient-yellow flex items-center justify-center shadow-sm">
               <Sparkles className="h-4 w-4 text-primary-foreground" />
@@ -235,7 +238,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => { setShowFavoritesOnly(false); setActiveCategory("All"); setSearch(""); }}
+            onClick={() => { setShowFavoritesOnly(false); setShowUpcomingOnly(true); setActiveCategory("All"); setSearch(""); }}
             className="flex flex-col items-center gap-1 rounded-2xl bg-primary-foreground/15 backdrop-blur-sm px-3 py-3 border border-primary-foreground/10 active:bg-primary-foreground/25 transition-all">
             <div className="h-8 w-8 rounded-xl gradient-blue flex items-center justify-center shadow-sm">
               <TrendingUp className="h-4 w-4 text-primary-foreground" />
@@ -248,7 +251,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            onClick={() => { setShowUpcomingOnly(false); setShowFavoritesOnly(!showFavoritesOnly); }}
             className={`flex flex-col items-center gap-1 rounded-2xl backdrop-blur-sm px-3 py-3 border transition-all ${
             showFavoritesOnly ?
             "bg-primary-foreground/30 border-primary-foreground/20 shadow-sm" :
@@ -283,6 +286,7 @@ const Index = () => {
                 setShowFavoritesOnly(false);
                 setActiveCategory("All");
                 setSearch("");
+                setShowUpcomingOnly(true);
                 setTimeout(() => {
                   document.getElementById("all-festivals")?.scrollIntoView({ behavior: "smooth" });
                 }, 100);
@@ -335,7 +339,7 @@ const Index = () => {
       {/* Section title */}
       <div id="all-festivals" className="px-6 mb-4 flex items-center justify-between relative z-10">
         <h2 className="text-lg font-extrabold font-body text-foreground">
-          {showFavoritesOnly ? "My Favorites ❤️" : activeCategory === "All" ? "All Festivals" : `${activeCategory} Festivals`}
+          {showFavoritesOnly ? "My Favorites ❤️" : showUpcomingOnly ? "Upcoming Festivals 🎉" : activeCategory === "All" ? "All Festivals" : `${activeCategory} Festivals`}
         </h2>
         <span className="text-[11px] text-muted-foreground font-bold font-body glass rounded-full px-3 py-1.5">{filtered.length} found</span>
       </div>
