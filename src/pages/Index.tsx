@@ -279,7 +279,14 @@ const Index = () => {
             </h2>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => { setShowFavoritesOnly(false); setActiveCategory("All"); setSearch(""); }}
+              onClick={() => {
+                setShowFavoritesOnly(false);
+                setActiveCategory("All");
+                setSearch("");
+                setTimeout(() => {
+                  document.getElementById("all-festivals")?.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+              }}
               className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors active:text-primary/60">
               <span className="text-[11px] font-bold">View all</span>
               <ChevronRight className="h-3.5 w-3.5" />
@@ -326,7 +333,7 @@ const Index = () => {
       </div>
 
       {/* Section title */}
-      <div className="px-6 mb-4 flex items-center justify-between relative z-10">
+      <div id="all-festivals" className="px-6 mb-4 flex items-center justify-between relative z-10">
         <h2 className="text-lg font-extrabold font-body text-foreground">
           {showFavoritesOnly ? "My Favorites ❤️" : activeCategory === "All" ? "All Festivals" : `${activeCategory} Festivals`}
         </h2>
