@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { MapPin, Calendar, ArrowRight, Heart } from "lucide-react";
 import { format } from "date-fns";
+import { useState } from "react";
+import HeartBurst from "./HeartBurst";
 
 interface Festival {
   id: string;
@@ -25,13 +27,14 @@ interface FestivalCardProps {
 }
 
 const categoryColors: Record<string, string> = {
-  religious: "bg-accent/15 text-accent border border-accent/20",
+  religious: "bg-accent/15 text-accent-foreground border border-accent/20",
   cultural: "bg-primary/15 text-primary border border-primary/20",
   harvest: "bg-secondary/15 text-secondary-foreground border border-secondary/20",
   festival: "bg-primary/15 text-primary border border-primary/20",
 };
 
 const FestivalCard = ({ festival, index, onClick, isFavorite = false, onToggleFavorite }: FestivalCardProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const startDate = new Date(festival.start_date);
   const endDate = festival.end_date ? new Date(festival.end_date) : null;
 
@@ -55,13 +58,21 @@ const FestivalCard = ({ festival, index, onClick, isFavorite = false, onToggleFa
       className="group cursor-pointer overflow-hidden rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-400 border border-border/50"
     >
       <div className="flex">
-        {/* Left: Image */}
-        <div className="relative h-[135px] w-[115px] flex-shrink-0 overflow-hidden">
+        {/* Left: Image with blur-up */}
+        <div className="relative h-[135px] w-[115px] flex-shrink-0 overflow-hidden bg-muted">
+          {/* Blurred placeholder */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-muted shimmer" />
+          )}
           <img
             src={festival.image_url || "/placeholder.svg"}
             alt={festival.name}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-115"
-            onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }}
+            loading="lazy"
+            className={`h-full w-full object-cover transition-all duration-700 group-hover:scale-115 ${
+              imageLoaded ? "opacity-100 blur-0" : "opacity-0 blur-sm"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={(e) => { e.currentTarget.src = "/placeholder.svg"; setImageLoaded(true); }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/10" />
           {/* Date badge */}
@@ -88,13 +99,14 @@ const FestivalCard = ({ festival, index, onClick, isFavorite = false, onToggleFa
                 </h3>
               </div>
               {onToggleFavorite && (
-                <motion.button
-                  whileTap={{ scale: 0.8 }}
-                  onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
-                  className="ml-2 flex-shrink-0 mt-1"
-                >
-                  <Heart className={`h-4.5 w-4.5 transition-all ${isFavorite ? "fill-primary text-primary scale-110" : "text-muted-foreground/40 hover:text-primary/60"}`} />
-                </motion.button>
+                <HeartBurst onTap={() => {}} className="ml-2 flex-shrink-0 mt-1">
+                  <motion.button
+                    whileTap={{ scale: 0.8 }}
+                    onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+                  >
+                    <Heart className={`h-4.5 w-4.5 transition-all duration-300 ${isFavorite ? "fill-primary text-primary scale-110" : "text-muted-foreground/40 hover:text-primary/60"}`} />
+                  </motion.button>
+                </HeartBurst>
               )}
             </div>
           </div>
