@@ -205,28 +205,26 @@ const Index = () => {
           }} />
         )}
 
-        <div className="relative z-10 flex items-center justify-between">
-          <div>
+        <div className="relative z-10 flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2">
+            <h1 className="font-display text-5xl font-bold text-primary-foreground drop-shadow-lg">
+              SeekLakaw
+            </h1>
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2">
-              <h1 className="font-display text-5xl font-bold text-primary-foreground drop-shadow-lg">
-                SeekLakaw
-              </h1>
-              <motion.div
-                animate={{ rotate: [0, 15, -15, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
-                <Crown className="h-6 w-6 text-primary-foreground drop-shadow-md" />
-              </motion.div>
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
+              <Crown className="h-6 w-6 text-primary-foreground drop-shadow-md" />
             </motion.div>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="mt-1.5 text-[13px] text-primary-foreground/75 font-body font-light tracking-wide">Explore Philippine Fiestas ✨
-            </motion.p>
-          </div>
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="mt-1.5 text-[13px] text-primary-foreground/75 font-body font-light tracking-wide">Explore Philippine Fiestas ✨
+          </motion.p>
         </div>
 
         {/* Search */}
