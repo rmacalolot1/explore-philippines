@@ -227,15 +227,49 @@ const Index = () => {
           </motion.p>
         </div>
 
-        {/* Search */}
-        <div className="relative mt-6 z-10">
-          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground/60" />
-          <Input
-            placeholder="Search festivals, locations..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-12 bg-background/90 backdrop-blur-xl border-0 h-14 rounded-2xl font-body shadow-elevated text-base placeholder:text-muted-foreground/50" />
-        </div>
+        {/* Search dialog */}
+        <AnimatePresence>
+          {showSearchDialog && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-6 bg-foreground/40 backdrop-blur-sm"
+              onClick={() => setShowSearchDialog(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: -30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                className="w-full max-w-md"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground/60" />
+                  <Input
+                    autoFocus
+                    placeholder="Search festivals, locations..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Escape") setShowSearchDialog(false); }}
+                    className="pl-12 bg-background border-0 h-14 rounded-2xl font-body shadow-elevated text-base placeholder:text-muted-foreground/50"
+                  />
+                </div>
+                {search && (
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-3 w-full text-center text-sm text-muted-foreground font-body"
+                    onClick={() => { setSearch(""); setShowSearchDialog(false); }}
+                  >
+                    Clear search
+                  </motion.button>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
 
