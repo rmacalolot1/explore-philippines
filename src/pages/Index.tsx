@@ -183,11 +183,11 @@ const Index = () => {
       </div>
 
       {/* Hero Header */}
-      <div className="relative z-10 overflow-hidden gradient-red px-6 pb-8 pt-14">
+      <div className="relative z-10 overflow-hidden bg-background px-6 pb-8 pt-14">
         {/* Decorative glow orbs */}
-        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-secondary/20 blur-3xl animate-pulse-glow" />
-        <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-accent/15 blur-2xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-1/2 right-0 h-32 w-32 rounded-full bg-primary-foreground/10 blur-2xl animate-pulse-glow" style={{ animationDelay: '3s' }} />
+        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
+        <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-primary/8 blur-2xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-1/2 right-0 h-32 w-32 rounded-full bg-primary/5 blur-2xl animate-pulse-glow" style={{ animationDelay: '3s' }} />
 
         {/* Sparkle dots */}
         {[...Array(8)].map((_, i) =>
@@ -198,7 +198,7 @@ const Index = () => {
             width: 6,
             height: 6,
             borderRadius: "1px",
-            background: ["hsl(340 65% 65%)", "hsl(350 55% 78%)", "hsl(330 50% 72%)"][i % 3],
+            background: ["hsl(340 82% 59% / 0.3)", "hsl(350 55% 78% / 0.3)", "hsl(330 50% 72% / 0.3)"][i % 3],
             top: `${15 + Math.random() * 70}%`,
             left: `${5 + Math.random() * 90}%`,
             animationDelay: `${i * 0.3}s`
@@ -210,20 +210,20 @@ const Index = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2">
-            <h1 className="font-display text-5xl font-bold text-primary-foreground drop-shadow-lg">
+            <h1 className="font-display text-5xl font-bold text-primary drop-shadow-lg">
               SeekLakaw
             </h1>
             <motion.div
               animate={{ rotate: [0, 15, -15, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
-              <Crown className="h-6 w-6 text-primary-foreground drop-shadow-md" />
+              <Crown className="h-6 w-6 text-primary drop-shadow-md" />
             </motion.div>
           </motion.div>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="mt-1.5 text-[13px] text-primary-foreground/75 font-body font-light tracking-wide">Explore Philippine Fiestas ✨
+            className="mt-1.5 text-[13px] text-primary/75 font-body font-light tracking-wide">Explore Philippine Fiestas ✨
           </motion.p>
         </div>
 
