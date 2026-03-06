@@ -18,19 +18,21 @@ const tabs = [
   { id: "profile" as Tab, icon: LogOut, label: "Sign Out" },
 ];
 
-const BottomNav = ({ activeTab, onTabChange, onLogout }: BottomNavProps) => {
+const BottomNav = ({ activeTab, onTabChange, onLogout, onSearchClick }: BottomNavProps) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 pb-safe">
       <div className="mx-3 mb-3 rounded-2xl glass-strong shadow-elevated border border-border/30">
         <div className="flex items-center justify-around py-2">
           {tabs.map(({ id, icon: Icon, label }) => {
-            const isActive = activeTab === id;
+            const isActive = id !== "search" && activeTab === id;
             return (
               <motion.button
                 key={id}
                 whileTap={{ scale: 0.85 }}
                 onClick={() => {
-                  if (id === "profile") {
+                  if (id === "search") {
+                    onSearchClick?.();
+                  } else if (id === "profile") {
                     onLogout();
                   } else {
                     onTabChange(id);
