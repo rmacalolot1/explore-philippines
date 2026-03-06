@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import splashBg from "@/assets/splash-bg.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Sparkles, Flame, Star, CalendarDays, ChevronRight, TrendingUp, Crown, Heart, PartyPopper } from "lucide-react";
@@ -168,7 +169,14 @@ const Index = () => {
   const favCount = favoriteIds.size;
 
   return (
-    <div className="min-h-screen bg-background pb-24 relative">
+    <div className="min-h-screen bg-background pb-24 relative overflow-hidden">
+      {/* Background image like login */}
+      <div
+        className="fixed inset-0 bg-cover bg-center scale-110"
+        style={{ backgroundImage: `url(${splashBg})` }}
+      />
+      <div className="fixed inset-0 bg-gradient-to-t from-background via-background/85 to-foreground/15" />
+      <div className="fixed inset-0 bg-gradient-to-br from-primary/8 via-transparent to-accent/8" />
       {/* Confetti rain */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <ConfettiRain count={20} />
