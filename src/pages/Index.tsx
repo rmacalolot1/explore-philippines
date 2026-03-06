@@ -237,56 +237,6 @@ const Index = () => {
             className="pl-12 bg-background/90 backdrop-blur-xl border-0 h-14 rounded-2xl font-body shadow-elevated text-base placeholder:text-muted-foreground/50" />
         </div>
 
-        {/* Stats pills */}
-        <div className="relative z-10 mt-5 grid grid-cols-3 gap-2">
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => { setShowFavoritesOnly(false); setShowUpcomingOnly(false); setActiveCategory("All"); setSearch(""); setActiveTab("home"); }}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-primary-foreground/15 backdrop-blur-sm px-3 py-3 border border-primary-foreground/10 active:bg-primary-foreground/25 transition-all">
-            <div className="h-8 w-8 rounded-xl gradient-yellow flex items-center justify-center shadow-sm">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-extrabold text-primary-foreground leading-none">{festivals.length}</span>
-            <span className="text-[10px] text-primary-foreground/60 font-semibold">Festivals</span>
-          </motion.button>
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => { setShowFavoritesOnly(false); setShowUpcomingOnly(true); setActiveCategory("All"); setSearch(""); setActiveTab("home"); }}
-            className="flex flex-col items-center gap-1 rounded-2xl bg-primary-foreground/15 backdrop-blur-sm px-3 py-3 border border-primary-foreground/10 active:bg-primary-foreground/25 transition-all">
-            <div className="h-8 w-8 rounded-xl gradient-blue flex items-center justify-center shadow-sm">
-              <TrendingUp className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-extrabold text-primary-foreground leading-none">{upcomingCount}</span>
-            <span className="text-[10px] text-primary-foreground/60 font-semibold">Upcoming</span>
-          </motion.button>
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => { setShowUpcomingOnly(false); setShowFavoritesOnly(!showFavoritesOnly); setActiveTab(showFavoritesOnly ? "home" : "favorites"); }}
-            className={`flex flex-col items-center gap-1 rounded-2xl backdrop-blur-sm px-3 py-3 border transition-all ${
-            showFavoritesOnly ?
-            "bg-primary-foreground/30 border-primary-foreground/20 shadow-sm" :
-            "bg-primary-foreground/15 border-primary-foreground/10"}`}>
-            <div className="h-8 w-8 rounded-xl gradient-red flex items-center justify-center shadow-sm">
-              <Heart className={`h-4 w-4 ${showFavoritesOnly ? "fill-primary-foreground text-primary-foreground" : "text-primary-foreground"}`} />
-            </div>
-            <span className="text-lg font-extrabold text-primary-foreground leading-none">{favCount}</span>
-            <span className="text-[10px] text-primary-foreground/60 font-semibold">Saved</span>
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Feast Banner */}
-      <div className="relative z-10">
-        <FeastBanner />
       </div>
 
       {/* Section Divider */}
