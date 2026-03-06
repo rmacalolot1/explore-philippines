@@ -94,6 +94,7 @@ const Index = () => {
   const [showUpcomingOnly, setShowUpcomingOnly] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"home" | "calendar" | "favorites" | "profile">("home");
+  const [showSearchDialog, setShowSearchDialog] = useState(false);
   const { isFavorite, toggleFavorite, favoriteIds } = useFavorites();
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, Heart, User, LogOut } from "lucide-react";
+import { Home, Search, CalendarDays, Heart, LogOut } from "lucide-react";
 
 type Tab = "home" | "calendar" | "favorites" | "profile";
 
@@ -7,10 +7,12 @@ interface BottomNavProps {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
   onLogout: () => void;
+  onSearchClick?: () => void;
 }
 
 const tabs = [
   { id: "home" as Tab, icon: Home, label: "Home" },
+  { id: "search" as const, icon: Search, label: "Search" },
   { id: "calendar" as Tab, icon: CalendarDays, label: "Calendar" },
   { id: "favorites" as Tab, icon: Heart, label: "Saved" },
   { id: "profile" as Tab, icon: LogOut, label: "Sign Out" },
