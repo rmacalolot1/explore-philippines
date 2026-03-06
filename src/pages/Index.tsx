@@ -429,6 +429,7 @@ const Index = () => {
         activeTab={activeTab}
         onTabChange={handleTabChange}
         onLogout={handleLogout}
+        onSearchClick={() => setShowSearchDialog(true)}
       />
     </div>);
 
