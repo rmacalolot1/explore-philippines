@@ -184,11 +184,74 @@ const Index = () => {
       </div>
 
       {/* Hero Header */}
-      <div className="relative z-10 overflow-hidden px-6 pb-8 pt-14" style={{ background: 'linear-gradient(135deg, hsl(340 60% 96%), hsl(340 82% 85%), hsl(340 82% 59%))' }}>
+      <div className="relative z-10 overflow-hidden px-6 pb-8 pt-14" style={{ background: 'hsl(340 80% 95%)' }}>
+        {/* Fiesta banner triangles - top left */}
+        <svg className="absolute top-0 left-0 w-24 h-24 z-0" viewBox="0 0 100 100" fill="none">
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <polygon
+              key={`tl-${i}`}
+              points={`${i * 14},0 ${i * 14 + 7},18 ${i * 14 + 14},0`}
+              fill={["hsl(340,82%,59%)", "hsl(45,100%,60%)", "hsl(160,60%,50%)", "hsl(210,80%,60%)", "hsl(30,90%,60%)", "hsl(280,60%,60%)", "hsl(340,82%,59%)"][i]}
+              opacity="0.7"
+            />
+          ))}
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <polygon
+              key={`tl2-${i}`}
+              points={`0,${i * 14} 18,${i * 14 + 7} 0,${i * 14 + 14}`}
+              fill={["hsl(45,100%,60%)", "hsl(340,82%,59%)", "hsl(280,60%,60%)", "hsl(160,60%,50%)", "hsl(30,90%,60%)", "hsl(210,80%,60%)", "hsl(45,100%,60%)"][i]}
+              opacity="0.7"
+            />
+          ))}
+        </svg>
+
+        {/* Fiesta banner triangles - top right */}
+        <svg className="absolute top-0 right-0 w-24 h-24 z-0" viewBox="0 0 100 100" fill="none">
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <polygon
+              key={`tr-${i}`}
+              points={`${i * 14},0 ${i * 14 + 7},18 ${i * 14 + 14},0`}
+              fill={["hsl(160,60%,50%)", "hsl(340,82%,59%)", "hsl(45,100%,60%)", "hsl(280,60%,60%)", "hsl(210,80%,60%)", "hsl(30,90%,60%)", "hsl(160,60%,50%)"][i]}
+              opacity="0.7"
+            />
+          ))}
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <polygon
+              key={`tr2-${i}`}
+              points={`100,${i * 14} 82,${i * 14 + 7} 100,${i * 14 + 14}`}
+              fill={["hsl(30,90%,60%)", "hsl(160,60%,50%)", "hsl(340,82%,59%)", "hsl(45,100%,60%)", "hsl(280,60%,60%)", "hsl(210,80%,60%)", "hsl(30,90%,60%)"][i]}
+              opacity="0.7"
+            />
+          ))}
+        </svg>
+
+        {/* Fiesta banner triangles - bottom left */}
+        <svg className="absolute bottom-0 left-0 w-20 h-20 z-0" viewBox="0 0 100 100" fill="none">
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <polygon
+              key={`bl-${i}`}
+              points={`${i * 14},100 ${i * 14 + 7},82 ${i * 14 + 14},100`}
+              fill={["hsl(210,80%,60%)", "hsl(45,100%,60%)", "hsl(340,82%,59%)", "hsl(160,60%,50%)", "hsl(30,90%,60%)", "hsl(280,60%,60%)", "hsl(210,80%,60%)"][i]}
+              opacity="0.6"
+            />
+          ))}
+        </svg>
+
+        {/* Fiesta banner triangles - bottom right */}
+        <svg className="absolute bottom-0 right-0 w-20 h-20 z-0" viewBox="0 0 100 100" fill="none">
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <polygon
+              key={`br-${i}`}
+              points={`${i * 14},100 ${i * 14 + 7},82 ${i * 14 + 14},100`}
+              fill={["hsl(280,60%,60%)", "hsl(30,90%,60%)", "hsl(160,60%,50%)", "hsl(45,100%,60%)", "hsl(340,82%,59%)", "hsl(210,80%,60%)", "hsl(280,60%,60%)"][i]}
+              opacity="0.6"
+            />
+          ))}
+        </svg>
+
         {/* Decorative glow orbs */}
         <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
         <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-primary/8 blur-2xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
-        <div className="absolute top-1/2 right-0 h-32 w-32 rounded-full bg-primary/5 blur-2xl animate-pulse-glow" style={{ animationDelay: '3s' }} />
 
         {/* Sparkle dots */}
         {[...Array(8)].map((_, i) =>
