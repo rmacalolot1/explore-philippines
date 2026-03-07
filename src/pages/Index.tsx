@@ -184,7 +184,7 @@ const Index = () => {
       </div>
 
       {/* Hero Header */}
-      <div className="relative z-10 overflow-hidden px-6 pb-8 pt-14" style={{ background: 'linear-gradient(to bottom, hsl(0 0% 100%), hsl(340 82% 59%))' }}>
+      <div className="relative z-10 overflow-hidden px-6 pb-8 pt-14" style={{ background: 'linear-gradient(135deg, hsl(340 60% 96%), hsl(340 82% 85%), hsl(340 82% 59%))' }}>
         {/* Decorative glow orbs */}
         <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
         <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-primary/8 blur-2xl animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
