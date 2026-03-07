@@ -184,7 +184,7 @@ const Index = () => {
       </div>
 
       {/* Hero Header */}
-      <div className="relative z-10 overflow-hidden px-6 pb-8 pt-14" style={{ background: 'hsl(340 80% 95%)' }}>
+      <div className="relative z-10 overflow-hidden px-6 pb-8 pt-14" style={{ background: '#2596be' }}>
         {/* Fiesta banner triangles - top left */}
         <svg className="absolute top-0 left-0 w-24 h-24 z-0" viewBox="0 0 100 100" fill="none">
           {[0, 1, 2, 3, 4, 5, 6].map((i) => (
